@@ -12,10 +12,15 @@ vagrant up
 This will create 3 virtual machines with redis installed and configured to work as a cluster.
 Make sure your system has the required packages installed. See the requirements section.
 
-## Configuration files
+# Configuration files
 
 The specific configuration files are located in the `files` directory and can be taken as a reference for the configuration of the redis cluster.
-To increase the number of nodes, you can add more nodes to the `Vagrantfile`.
+To be noticed the configuration of 2 services:
+
+- redis in cluster mode
+- redis-sentinel to monitor the redis cluster
+
+We can also consider the provision of the nodes which is done in `scripts/provision.sh`. To increase the number of nodes, you can also add more machines into the `Vagrantfile`.
 
 # Usefull commands
 
@@ -40,7 +45,6 @@ Create a diff between the vendor configuration and the current configuration
 ```bash
 vagrant ssh master1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
 vagrant ssh master1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
-
 
 vagrant ssh slave1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
 vagrant ssh slave1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
