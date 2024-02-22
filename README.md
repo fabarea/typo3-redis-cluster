@@ -1,19 +1,57 @@
-# typo3-redis-cluster
+Redis environment for TYPO3
+============================
 
 Start with the following commands:
 
 ```bash
-git clone
+git clone ...
 cd typo3-redis-cluster
 vagrant up
 ```
 
 This will create 3 virtual machines with redis installed and configured to work as a cluster.
+Make sure your system has the required packages installed. See the requirements section.
 
-## Requirements
+## Configuration files
+
+The specific configuration files are located in the `files` directory and can be taken as a reference for the configuration of the redis cluster.
+To increase the number of nodes, you can add more nodes to the `Vagrantfile`.
+
+# Usefull commands
+
+## Run some functional tests
+
+```bash
+./tests/1-write-and-read-data.sh
+./tests/2-info-from-sentinel.sh
+```
+
+## Show the logs
+
+```bash
+./logs/redis-logs.sh
+./logs/redis-sentinels-logs.sh
+```
+
+## See configuration diff
+
+Create a diff between the vendor configuration and the current configuration
+
+```bash
+vagrant ssh master1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
+vagrant ssh master1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
+
+
+vagrant ssh slave1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
+vagrant ssh slave1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
+```
+
+# Required packages
+
+We use the following tools:
 
 - Vagrant
-- We are using libvirt with KVM as virtualization instead of virtualbox. As we are using a linux host, we can avoid the overhead of virtualbox. Assuming we are using Ubuntu, we can install the required packages with the following commands:
+- As virtualization, we are using libvirt with KVM instead of virtualbox. As we are assuming a linux host, we can avoid the overhead of virtualbox. Assuming we are using Ubuntu, we can install the required packages with the following commands:
 
 ```bash
 # install required packages
@@ -39,38 +77,7 @@ vagrant plugin install vagrant-libvirt
 vagrant plugin install vagrant-hostsupdater
 ```
 
-## Configuration files
-
-The configuration is done in the Vagrantfile. You can change the number of nodes, the memory, the cpu, the ip, etc.
-
-
-
-## Usefull commands
-
-```bash
-./scripts/tail-redis-logs.sh
-```
-
-# Test cases
-
-```bash
-./tests/1-write-and-read-data.sh
-```
-
 #  Open questions
 
 * Is a firewall enabled in the PRD, VAL, INT environment?
 * Do we require a password to connect to the redis cluster?
-
-# Todos
-
-* create a diff of the config files
-
-```bash
-diff -ru files/master1/redis.vendor.conf files/master1/redis.conf
-diff -ru files/master1/redis-sentinel.vendor.conf files/master1/redis-sentinel.conf
-diff -ru files/slave1/redis.vendor.conf files/slave1/redis.conf
-diff -ru files/slave1/redis-sentinel.vendor.conf files/slave1/redis-sentinel.conf
-diff -ru files/slave2/redis.vendor.conf files/slave2/redis.conf
-diff -ru files/slave2/redis-sentinel.vendor.conf files/slave2/redis-sentinel.conf
-```
