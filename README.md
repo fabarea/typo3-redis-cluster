@@ -20,7 +20,7 @@ To be noticed the configuration of 2 services:
 - redis in cluster mode
 - redis-sentinel to monitor the redis cluster
 
-We can also consider the provision of the nodes which is done in `scripts/provision.sh`. To increase the number of nodes, you can also add more machines into the `Vagrantfile`.
+We can also consider the provision of the nodes which is done in `provision/redis/provision.sh`. To increase the number of nodes, you can also add more machines into the `Vagrantfile`.
 
 # Usefull commands
 
@@ -28,14 +28,14 @@ We can also consider the provision of the nodes which is done in `scripts/provis
 
 ```bash
 ./tests/1-write-and-read-data.sh
-./tests/2-info-from-sentinel.sh
+./tests/2-sentinel.sh
 ```
 
 ## Show the logs
 
 ```bash
-./logs/redis-logs.sh
-./logs/redis-sentinels-logs.sh
+./scripts/redis-logs.sh
+./scripts/sentinels-logs.sh
 ```
 
 ## See configuration diff
@@ -62,7 +62,7 @@ We use the following tools:
 sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients
 sudo apt install vagrant
 
-# optional, used for tailing logs in separate windows in scripts/tail-redis-logs.sh
+# optional, used for tailing logs in separate windows in scripts/redis-logs.sh
 sudo apt install tmux
 
 # will require a reboot

@@ -8,7 +8,7 @@ nodes=(
 commands=(
     # "sentinel master my-cluster"
     "sentinel get-master-addr-by-name my-cluster"
-    "sentinel sentinels my-cluster"
+    # "sentinel sentinels my-cluster"
 )
 
 for node in "${nodes[@]}"; do
