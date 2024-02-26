@@ -4,7 +4,7 @@ value="hello-world..."
 echo "writing data to master, value: \"${value}\""
 vagrant ssh master1 -- redis-cli set hello ${value}
 
-nodes=("master1" "slave1" "slave2")
+nodes=("master1" "replica1" "replica2")
 
 for node in "${nodes[@]}"
 do

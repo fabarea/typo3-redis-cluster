@@ -46,8 +46,8 @@ Create a diff between the vendor configuration and the current configuration
 vagrant ssh master1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
 vagrant ssh master1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
 
-vagrant ssh slave1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
-vagrant ssh slave1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
+vagrant ssh replica1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
+vagrant ssh replica1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
 ```
 
 # Required packages

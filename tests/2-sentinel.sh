@@ -2,13 +2,13 @@
 
 nodes=(
     "master1"
-    "slave1"
-    "slave2"
+    "replica1"
+    "replica2"
 )
 commands=(
-    # "sentinel master my-cluster"
-    "sentinel get-master-addr-by-name my-cluster"
-    # "sentinel sentinels my-cluster"
+    # "sentinel master mymaster"
+    "sentinel get-master-addr-by-name mymaster"
+    # "sentinel sentinels mymaster"
 )
 
 for node in "${nodes[@]}"; do
