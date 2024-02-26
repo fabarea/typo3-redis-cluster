@@ -22,9 +22,8 @@ Vagrant.configure("2") do |config|
     node.vm.provision "file", source: "files/web/nginx-default.conf", destination: "/tmp/default.conf"
     node.vm.provision "file", source: "files/web/dot_env", destination: "/tmp/.env"
     node.vm.provision "file", source: "files/web/AdditionalConfiguration.php", destination: "/tmp/AdditionalConfiguration.php"
-    node.vm.provision "shell", path: "provision/web/finisher.sh"
+    node.vm.provision "shell", path: "provision/web/provision-post.sh"
     # replace the php value max_execution_time = 30 to be max_execution_time = 300
-
 
     # VirtualBox spcific
     # node.vm.provider :virtualbox do |vb|
@@ -54,7 +53,7 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell", path: "provision/redis/provision.sh"
     node.vm.provision "file", source: "files/redis/master/redis.conf", destination: "/tmp/redis.conf"
     node.vm.provision "file", source: "files/sentinel/redis-sentinel.conf", destination: "/tmp/redis-sentinel.conf"
-    node.vm.provision "shell", path: "provision/redis/finisher.sh"
+    node.vm.provision "shell", path: "provision/redis/provision-post.sh"
   end
 
   # ###################################
@@ -71,7 +70,7 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell", path: "provision/redis/provision.sh"
     node.vm.provision "file", source: "files/redis/slave/redis.conf", destination: "/tmp/redis.conf"
     node.vm.provision "file", source: "files/sentinel/redis-sentinel.conf", destination: "/tmp/redis-sentinel.conf"
-    node.vm.provision "shell", path: "provision/redis/finisher.sh"
+    node.vm.provision "shell", path: "provision/redis/provision-post.sh"
   end
 
 
@@ -89,6 +88,6 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell", path: "provision/redis/provision.sh"
     node.vm.provision "file", source: "files/redis/slave/redis.conf", destination: "/tmp/redis.conf"
     node.vm.provision "file", source: "files/sentinel/redis-sentinel.conf", destination: "/tmp/redis-sentinel.conf"
-    node.vm.provision "shell", path: "provision/redis/finisher.sh"
+    node.vm.provision "shell", path: "provision/redis/provision-post.sh"
   end
 end

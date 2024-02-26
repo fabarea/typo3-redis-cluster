@@ -2,19 +2,23 @@
 
 # FYI: this script is executed as root
 
-# copy some config files
+# #####################################
+# nginx
+# #####################################
 cp /tmp/default.conf /etc/nginx/conf.d
+systemctl restart nginx
 
-# Replace some default values
+# #####################################
+# php
+# #####################################
 sed -i 's/max_execution_time = 30/max_execution_time = 300/g' /etc/php.ini
 sed -i 's/;max_input_vars = 1000/max_input_vars = 3000/g' /etc/php.ini
 sed -i 's/display_errors = Off/display_errors = On/g' /etc/php.ini
+systemctl restart php-fpm
 
-# Restart services
-systemctl restart php-fpm nginx
-
-
-# copy some config files
+# #####################################
+# typo3
+# #####################################
 if [ ! -f /var/www/html/typo3/public/typo3conf/AdditionalConfiguration.php ]; then
   cp /tmp/AdditionalConfiguration.php /var/www/html/typo3/public/typo3conf/AdditionalConfiguration.php
   chown apache:apache /var/www/html/typo3/public/typo3conf/AdditionalConfiguration.php
@@ -23,7 +27,9 @@ if [ ! -f /var/www/html/typo3/public/typo3conf/AdditionalConfiguration.php ]; th
   chown apache:apache /var/www/html/typo3/.env
 fi
 
-# same but with ip command
+# #####################################
+# welcome message
+# #####################################
 ip=$(ip addr show eth1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 
 echo "Install TYPO3 at http://${ip}"

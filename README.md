@@ -34,8 +34,8 @@ We can also consider the provision of the nodes which is done in `provision/redi
 ## Show the logs
 
 ```bash
-./scripts/redis-logs.sh
-./scripts/sentinels-logs.sh
+./logs/redis.sh
+./logs/sentinels.sh
 ```
 
 ## See configuration diff
@@ -62,7 +62,7 @@ We use the following tools:
 sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients
 sudo apt install vagrant
 
-# optional, used for tailing logs in separate windows in scripts/redis-logs.sh
+# optional, used for tailing logs in separate windows in logs/redis.sh
 sudo apt install tmux
 
 # will require a reboot
@@ -85,3 +85,17 @@ vagrant plugin install vagrant-hostsupdater
 
 * Is a firewall enabled in the PRD, VAL, INT environment?
 * Do we require a password to connect to the redis cluster?
+
+
+## Simulate a fail over
+
+Prepare the console
+
+```shell
+./logs/redis.sh
+./logs/sentinels.sh
+```
+
+```shell
+vagrant ssh master1 -- redis-cli -p 6379 DEBUG sleep 300
+```
