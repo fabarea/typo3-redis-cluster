@@ -85,7 +85,7 @@ slave-priority <my-priority>
       target: `/usr/local/lib/node_modules/redis-commander/config/local-development.json`
     - Install the systemd service unit:
         - source: `./files/redis-commander/redis-commander.service`
-        - target: `/etc/systemd/system/redis-commander.service`
+          target: `/etc/systemd/system/redis-commander.service`
 
 * Inspect the respective logs
 
