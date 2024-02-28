@@ -7,7 +7,6 @@ Vagrant.configure("2") do |config|
   # must comes at the end, so that the network is up and running
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
-  # config.vm.provision :hostmanager
 
   # ###################################
   # web1
@@ -17,8 +16,7 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "web1"
 
     # specific provider configuration
-    configure_provider(node)
-    node.vm.provision :hostmanager
+    configure_network(node)
 
     # copy template to "web1"
     node.vm.provision "file", source: "files/web/nginx-default.conf", destination: "/tmp/default.conf"
@@ -38,14 +36,13 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "master1"
 
     # specific provider configuration
-    configure_provider(node)
-    node.vm.provision :hostmanager
+    configure_network(node)
 
     # copy template to "master1"
     node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
     node.vm.provision "file", source: "files/sentinel/redis-sentinel.conf", destination: "/tmp/redis-sentinel.conf"
-    node.vm.provision "file", source: "files/sentinel/redis-sentinel-2379.conf", destination: "/tmp/redis-sentinel-2379.conf"
-    node.vm.provision "file", source: "files/sentinel/redis-sentinel-2379.service", destination: "/tmp/redis-sentinel-2379.service"
+    node.vm.provision "file", source: "files/sentinel/redis-sentinel-26379.conf", destination: "/tmp/redis-sentinel-26379.conf"
+    node.vm.provision "file", source: "files/sentinel/redis-sentinel-26379.service", destination: "/tmp/redis-sentinel-26379.service"
     node.vm.provision "file", source: "files/redis-commander/local-development.json", destination: "/tmp/local-development.json"
     node.vm.provision "file", source: "files/redis-commander/redis-commander.service", destination: "/tmp/redis-commander.service"
 
@@ -63,8 +60,7 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "replica1"
 
     # specific provider configuration
-    configure_provider(node)
-    node.vm.provision :hostmanager
+    configure_network(node)
 
     # copy template to "replica1"
     node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
@@ -83,8 +79,7 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "replica2"
 
     # specific provider configuration
-    configure_provider(node)
-    node.vm.provision :hostmanager
+    configure_network(node)
 
     # copy template to "replica2"
     node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
@@ -117,7 +112,7 @@ Vagrant.configure("2") do |config|
   # ###################################
   # Helper for networking and shared folders
   # ###################################
-  def configure_provider(node)
+  def configure_network(node)
 
     # will add and additional network interface to the VM, eth1
     # maybe required for virtualbox to explicitly create a private netowk.
@@ -143,5 +138,9 @@ Vagrant.configure("2") do |config|
     #config.vm.provider "virtualbox" do |v|
     #  v.customize ["modifyvm", :id, "--memory", 4092, "--cpus", 2, "--name", "foo"]
     #end
+
+    # handle the /etc/hosts file
+    node.vm.provision :shell, inline: 'sed -i "/^127.0.1.1 $(hostname)/c\#127.0.1.1 $(hostname)" /etc/hosts'
+    node.vm.provision :hostmanager
   end
 end

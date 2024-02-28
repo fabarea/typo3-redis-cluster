@@ -27,10 +27,10 @@ sudo systemctl restart redis
 sudo systemctl restart redis-sentinel
 
 # Possibly install the second instance of sentinel
-if [ -f /tmp/redis-sentinel-2379.conf ]; then
-  sudo cp /tmp/redis-sentinel-2379.conf /etc/redis-sentinel-2379.conf
-  cp /tmp/redis-sentinel-2379.service /etc/systemd/system/redis-sentinel-2379.service
+if [ -f /tmp/redis-sentinel-26379.conf ]; then
+  sudo cp /tmp/redis-sentinel-26379.conf /etc/redis-sentinel-26379.conf
+  cp /tmp/redis-sentinel-26379.service /etc/systemd/system/redis-sentinel-26379.service
   systemctl daemon-reload
-  systemctl enable redis-sentinel-2379.service -q
-  # systemctl restart redis-sentinel-2379.service
+  systemctl enable redis-sentinel-26379.service -q
+  # systemctl restart redis-sentinel-26379.service
 fi

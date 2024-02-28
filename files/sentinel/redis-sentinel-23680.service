@@ -5,8 +5,8 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/usr/bin/redis-sentinel /etc/redis-sentinel-2379.conf --supervised systemd
-ExecStop=/usr/libexec/redis-shutdown redis-sentinel-2379
+ExecStart=/usr/bin/redis-sentinel /etc/redis-sentinel-26380.conf --supervised systemd
+ExecStop=/usr/libexec/redis-shutdown redis-sentinel-26380
 Type=notify
 User=redis
 Group=redis
