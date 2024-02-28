@@ -11,47 +11,6 @@ cd typo3-redis-cluster
 vagrant up
 ```
 
-# Useful commands
-
-## Run some functional tests
-
-This should be executed after the VMs are up and running. We write and read data, test the sentinel.
-
-```bash
-./tests/0-benchmark.sh
-./tests/1-write-and-read-data.sh
-./tests/2-sentinel.sh
-```
-
-## Show the logs
-
-This will tail the logs of the redis instances and the sentinels. We can see the failover in action.
-
-```bash
-./logs/redis.sh
-./logs/sentinels.sh
-```
-
-## Simulate a fail over
-
-For better insight, it is advisable to open the logs in separate windows (cf. commands above). We can then simulate a failover by stopping the master. We should see sentinel detecting the failure and promoting a new master.
-
-```shell
-vagrant ssh master1 -- redis-cli -p 6379 DEBUG sleep 300
-```
-
-## See configuration diff
-
-Create a diff between the vendor configuration and the current configuration
-
-```bash
-vagrant ssh master1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
-vagrant ssh master1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
-
-vagrant ssh replica1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
-vagrant ssh replica1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
-```
-
 # Install - local development
 
 We use the following tools:
@@ -191,3 +150,44 @@ We can make use of the additional config files provided by
 * TYPO3 user.ini to save browser sessions in redis instead of file cookies
 * Firewall configuration required?
 * Redis with password configuration required?
+
+# Useful commands
+
+## Run some functional tests
+
+This should be executed after the VMs are up and running. We write and read data, test the sentinel.
+
+```bash
+./tests/0-benchmark.sh
+./tests/1-write-and-read-data.sh
+./tests/2-sentinel.sh
+```
+
+## Show the logs
+
+This will tail the logs of the redis instances and the sentinels. We can see the failover in action.
+
+```bash
+./logs/redis.sh
+./logs/sentinels.sh
+```
+
+## Simulate a fail over
+
+For better insight, it is advisable to open the logs in separate windows (cf. commands above). We can then simulate a failover by stopping the master. We should see sentinel detecting the failure and promoting a new master.
+
+```shell
+vagrant ssh master1 -- redis-cli -p 6379 DEBUG sleep 300
+```
+
+## See configuration diff
+
+Create a diff between the vendor configuration and the current configuration
+
+```bash
+vagrant ssh master1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
+vagrant ssh master1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
+
+vagrant ssh replica1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
+vagrant ssh replica1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
+```
