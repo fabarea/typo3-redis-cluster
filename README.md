@@ -60,12 +60,27 @@ We use the following tools:
 - As virtualization, we are using libvirt with KVM instead of virtualbox. As we are assuming a linux host, we can avoid the overhead of virtualbox. Assuming we are using Ubuntu, we can install the required packages with the following commands:
 
 ```bash
-# install required packages
-sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients
+# virtualbox is a bit more common and has less edge cases
+# on local development when it comes to networking and file sharing.
+# virtualization with libvirt and KVM is also possible, see below
+sudo apt install virtualbox
 sudo apt install vagrant
 
 # optional, used for tailing logs in separate windows in logs/redis.sh
 sudo apt install tmux
+
+# install vagrant properly
+sudp apt install vagrant
+
+# install additional plugins
+vagrant plugin install vagrant-libvirt
+vagrant plugin install vagrant-hostmanager
+```
+
+As an alternative, we can virtualize with libvirt and KVM instead of virtualbox. Notice: as limitation, we need an ethernet network connection to obtains a public ip addresses for the VMs to connect on the lan. This will not work over wifi.
+
+```shell
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients
 
 # will require a reboot
 sudo adduser $USER libvirt
@@ -74,13 +89,6 @@ sudo adduser $USER libvirt-qemu
 # we could try this we should avoid a reboot
 sudo usermod -aG libvirt $(whoami)
 groups
-
-# install vagrant properly
-sudp apt install vagrant
-
-# install additional plugins
-vagrant plugin install vagrant-libvirt
-vagrant plugin install vagrant-hostsupdater
 ```
 
 ## Troubleshoting
@@ -127,21 +135,40 @@ bind 127.0.0.1 <my-ip>
 slave-priority <my-priority>
 ```
 
-* Configuration Sentinel
+* Configuration Redis Sentinel
     - source: `./files/redis/redis-sentinel.conf`
     - target: `/usr/local/lib/node_modules/redis-commander/config/local-development.json`
     - recipe: `provision/redis/2-configure.sh`
 
-* Configuration for graphical admin console
+* Configuration Redis Commender (graphical admin console)
     - source: `./files/redis-commander/local-development.json`
     - target: `/etc/redis.conf`
     - Install the systemd service unit:
         - source: `./files/redis-commander/redis-commander.service`
         - target: `/etc/systemd/system/redis-commander.service`
 
+* Inspect the respective logs
+
+```shell
+journalctl -feu redis
+journalctl -feu redis-sentinel
+journalctl -feu redis-commander
+```
+
+## Caveats
+
+In order to provide high availability in redis, we need to have at least 3 sentinels. Sentinels are used to monitor the redis instances and to promote a new master in case of failure. To reach a quorum, we need at least 3 instances. In the conext of 2 VMs, we can set up 2 sentinels on each VM.
+
+We can make use of the additional config files provided by
+
+* source: `./files/sentinel/redis-sentinel-26380.conf`
+  target: `/etc/redis-sentinel-26380.conf`
+* source: `./files/sentinel/redis-sentinel-2380.service`,
+  target: `/etc/systemd/system/redis-sentinel-2379.service`
+
 ## Testing
 
-* Functional tests
+* Functional tests. Scripts need to be adjusted in production context.
     - `./tests/0-benchmark.sh`
     - `./tests/1-write-and-read-data.sh`
     - `./tests/2-sentinel.sh`
@@ -160,7 +187,7 @@ slave-priority <my-priority>
 
 ##  Todo
 
-* config to have 2 sentinels running on the same machine as we only have 2 VMs and we need 3 sentinels at least
-* write a systemd service unit for redis-commander
 * TYPO3 setup with redis sentinels
-* firewall configuration?
+* TYPO3 user.ini to save browser sessions in redis instead of file cookies
+* Firewall configuration required?
+* Redis with password configuration required?

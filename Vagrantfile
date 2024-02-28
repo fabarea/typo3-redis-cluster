@@ -3,6 +3,12 @@ Vagrant.configure("2") do |config|
   #config.vm.provider "libvirt"
   config.vm.provider "virtualbox"
 
+  # plugin: hostmanager
+  # must comes at the end, so that the network is up and running
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  # config.vm.provision :hostmanager
+
   # ###################################
   # web1
   # ###################################
@@ -12,6 +18,7 @@ Vagrant.configure("2") do |config|
 
     # specific provider configuration
     configure_provider(node)
+    node.vm.provision :hostmanager
 
     # copy template to "web1"
     node.vm.provision "file", source: "files/web/nginx-default.conf", destination: "/tmp/default.conf"
@@ -32,10 +39,13 @@ Vagrant.configure("2") do |config|
 
     # specific provider configuration
     configure_provider(node)
+    node.vm.provision :hostmanager
 
     # copy template to "master1"
     node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
     node.vm.provision "file", source: "files/sentinel/redis-sentinel.conf", destination: "/tmp/redis-sentinel.conf"
+    node.vm.provision "file", source: "files/sentinel/redis-sentinel-2379.conf", destination: "/tmp/redis-sentinel-2379.conf"
+    node.vm.provision "file", source: "files/sentinel/redis-sentinel-2379.service", destination: "/tmp/redis-sentinel-2379.service"
     node.vm.provision "file", source: "files/redis-commander/local-development.json", destination: "/tmp/local-development.json"
     node.vm.provision "file", source: "files/redis-commander/redis-commander.service", destination: "/tmp/redis-commander.service"
 
@@ -54,6 +64,7 @@ Vagrant.configure("2") do |config|
 
     # specific provider configuration
     configure_provider(node)
+    node.vm.provision :hostmanager
 
     # copy template to "replica1"
     node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
@@ -73,6 +84,7 @@ Vagrant.configure("2") do |config|
 
     # specific provider configuration
     configure_provider(node)
+    node.vm.provision :hostmanager
 
     # copy template to "replica2"
     node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
@@ -84,13 +96,33 @@ Vagrant.configure("2") do |config|
   end
 
   # ###################################
+  # Helper to resolve the ip address bound to eth1
+  # ###################################
+  config.hostmanager.ip_resolver = proc do |machine|
+    result = ""
+    machine.communicate.execute("ip address show eth1") do |type, data|
+      result << data if type == :stdout
+    end
+
+    ip_match = /inet (\d+\.\d+\.\d+\.\d+)/.match(result)
+    if ip_match
+      ip_match[1]
+      #resolved_ip
+    else
+      machine.ui.warn("Failed to resolve IP address for eth1.")
+      nil
+    end
+  end
+
+  # ###################################
   # Helper for networking and shared folders
   # ###################################
   def configure_provider(node)
 
+    # will add and additional network interface to the VM, eth1
     # maybe required for virtualbox to explicitly create a private netowk.
     # libvirt would create it automatically
-    #config.vm.network "private_network", type: "dhcp"
+    # node.vm.network "private_network", type: "dhcp"
 
     # VirtualBox specific
     node.vm.network :public_network, bridge: "wlp110s0"

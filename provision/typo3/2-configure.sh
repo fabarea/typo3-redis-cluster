@@ -11,9 +11,17 @@ systemctl restart nginx
 # #####################################
 # php
 # #####################################
+# typo3 specific
 sed -i 's/max_execution_time = 30/max_execution_time = 300/g' /etc/php.ini
 sed -i 's/;max_input_vars = 1000/max_input_vars = 3000/g' /etc/php.ini
+
+# dev context
 sed -i 's/display_errors = Off/display_errors = On/g' /etc/php.ini
+
+# enable session redis storage
+sed -i 's/session.save_handler = files/session.save_handler = redis/g' /etc/php.ini
+sed -i 's/;session.save_path = "/tmp"/session.save_path = "tcp://master1:6379"/g' /etc/php.ini
+
 systemctl restart php-fpm
 
 # #####################################

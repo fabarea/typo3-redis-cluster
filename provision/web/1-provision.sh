@@ -39,3 +39,6 @@ systemctl disable firewalld -q
 # Alternative: allow HTTP and HTTPS traffic
 #sudo firewall-cmd --permanent --add-service=http
 #sudo firewall-cmd --permanent --add-service=https
+
+# will be fixed by command `vagrant hostmanager`
+sudo sed -i "/^127.0.1.1 $(hostname)/c\#127.0.1.1 $(hostname)" /etc/hosts
