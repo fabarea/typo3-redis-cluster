@@ -22,10 +22,17 @@ Vagrant.configure("2") do |config|
     node.vm.provision "file", source: "files/web/nginx-default.conf", destination: "/tmp/default.conf"
     node.vm.provision "file", source: "files/web/dot_env", destination: "/tmp/.env"
     node.vm.provision "file", source: "files/web/AdditionalConfiguration.php", destination: "/tmp/AdditionalConfiguration.php"
+    node.vm.provision "file", source: "files/ssh/authorized_keys", destination: "/tmp/authorized_keys" if File.exist?("files/ssh/authorized_keys")
 
     node.vm.provision "shell", path: "provision/web/1-provision.sh"
     node.vm.provision "shell", path: "provision/typo3/1-typo3.sh"
     node.vm.provision "shell", path: "provision/typo3/2-configure.sh"
+
+    # add 6gb of memory
+    node.vm.provider "virtualbox" do |v|
+      v.memory = 6144
+    end
+
   end
 
   # ###################################
@@ -55,7 +62,7 @@ Vagrant.configure("2") do |config|
   # ###################################
   # replica1
   # ###################################
-  config.vm.define "replica1" do |node|
+  config.vm.define "replica1" do |node| # rename redis2
     node.vm.box = "generic/centos7"
     node.vm.hostname = "replica1"
 
@@ -121,15 +128,10 @@ Vagrant.configure("2") do |config|
 
     # VirtualBox specific
     node.vm.network :public_network, bridge: "wlp110s0"
-    # other options: :nfs, :rsync, :9p, :virtfs
-    # node.vm.synced_folder "./typo3", "/var/www/html/typo3", type: "nfs"
-    # node.vm.synced_folder "./typo3", "/var/www/html/typo3", type: "rsync" # unidirectonal
 
     # libvirt specific
     if ENV['VAGRANT_DEFAULT_PROVIDER'] == 'libvirt'
       node.vm.network :public_network, :dev => 'eno1', :mode => "bridge"
-      # https://discuss.hashicorp.com/t/vagrants-synced-folders-over-nfs-do-not-work-with-libvirt-provider/33262/1
-      # config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ["vers=3,tcp"] # libvirt specialty
       node.vm.provider :libvirt do |libvirt|
         libvirt.driver = "kvm"
       end

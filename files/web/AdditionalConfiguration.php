@@ -2,6 +2,20 @@
 
 $TYPO3_CONF_VARS['SYS']['trustedHostsPattern'] =".*";
 
+// Development settings
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['sqlDebug'] = 1;
+$GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 1;
+$GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] = 1;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['displayErrors'] = '1';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask'] = '*';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['errorHandler'] = 'TYPO3\\CMS\\Core\\Error\\ErrorHandler';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['errorHandlerErrors'] = E_ALL ^ E_NOTICE;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['exceptionalErrors'] = E_ALL ^ E_NOTICE ^ E_WARNING ^ E_USER_ERROR ^ E_USER_NOTICE ^ E_USER_WARNING;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = 'TYPO3\\CMS\\Core\\Error\\DebugExceptionHandler';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = 'TYPO3\\CMS\\Core\\Error\\DebugExceptionHandler';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLogLevel'] = '0';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLog'] = true;
+
 if (getenv('REDIS_HOST')) {
     $redisCaches = [
         'assets',

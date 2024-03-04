@@ -15,9 +15,8 @@ if [ ! -f "$FLAG_FILE" ]; then
   echo "Installing TYPO3 specific dependencies"
   yum install -y ImageMagick GraphicsMagick ghostscript
 
-  # Just for enabling composer caching
-  mkdir /usr/share/httpd/{.composer,.vim}
-  chown apache:apache /usr/share/httpd/{.composer,.vim}
+  # Enabling various folder for apache user such as .composer, .vim, .ssh, .vscode-server, .cache, .config, .local, .java
+  chown apache:apache /usr/share/httpd
 
   # SELinux serve files off Apache, resursive
   mkdir /var/www/html/typo3
@@ -47,4 +46,17 @@ if [ ! -f "$FLAG_FILE" ]; then
   sudo touch /var/www/html/typo3/public/FIRST_INSTALL
 
   touch "$FLAG_FILE"
+fi
+
+AUTHORIZED_KEYS="/tmp/authorized_keys"
+if [ -f "${AUTHORIZED_KEYS}" ]; then
+  # we create a directory and set the correct permission
+  sudo -u apache mkdir -m 700 /usr/share/httpd/.ssh
+
+  cp "${AUTHORIZED_KEYS}" /usr/share/httpd/.ssh/authorized_keys
+  chown apache:apache /usr/share/httpd/.ssh/authorized_keys
+  chmod 600 /usr/share/httpd/.ssh/authorized_keys
+
+  # Make it convenient for apache user to use sudo for development purpose
+  echo "apache ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/apache
 fi

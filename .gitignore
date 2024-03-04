@@ -30,3 +30,6 @@ test/tmp/
 /exec
 .ruby-bundle
 vendor/bundle
+
+# Project specific
+files/ssh/authorized_keys

@@ -128,8 +128,30 @@ We can make use of the additional config files provided by
 ##  Todo
 
 * TYPO3 setup with redis sentinels
+
+```php
+public/typo3/sysext/core/Classes/Cache/Backend/RedisBackend.php
+
+$sentinel = new \RedisSentinel('master1', 26379, 2.5);
+$masterName = 'mymaster';
+[$masterIp, $masterPort] = $sentinel->getMasterAddrByName($masterName);
+$this->hostname = $masterIp;
+$this->port = $masterPort;
+
+
+public/typo3conf/ext/distributed_locks/src/RedisLockingStrategy.php
+```
+
 * TYPO3 user.ini to save browser sessions in redis instead of file cookies
-* Firewall configuration required?
+
+```shell
+  sed -i 's/session.save_handler = files/session.save_handler = redis/g' /etc/php.ini
+  sed -i 's#;session.save_path = "/tmp"#session.save_path = "tcp://master1:6379"#g' /etc/php.ini
+```
+
+* To be tested https://packagist.org/packages/b13/graceful-cache
+  We don't want our websites to be down because the cache backend used, e.g. "redis" or "memcached" has a temporary issue. For this reason, we provide Cache Backends which simply catch all Exceptions.
+
 * Redis with password configuration required?
 
 # Useful commands
@@ -171,4 +193,19 @@ vagrant ssh master1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-
 
 vagrant ssh replica1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
 vagrant ssh replica1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
+```
+
+## Packaging redis-commander
+
+```shell
+sudo su -
+npm install -g npm-pack-all
+cd /usr/local/lib/node_modules/redis-commander
+npm-pack-all
+
+# create a tarball
+tar -czvf redis-commander.tar.gz /usr/local/lib/node_modules/redis-commander
+
+# deploy the npm package "offline"
+npm install redis-commander.tar.gz
 ```

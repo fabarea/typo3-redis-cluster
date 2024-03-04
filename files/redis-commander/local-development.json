@@ -24,7 +24,7 @@
             "dbIndex": 1,
             "sentinels": [
                 {
-                    "host": "master2",
+                    "host": "master1",
                     "port": 26379
                 },
                 {
@@ -43,7 +43,7 @@
             "dbIndex": 2,
             "sentinels": [
                 {
-                    "host": "master2",
+                    "host": "master1",
                     "port": 26379
                 },
                 {
@@ -62,7 +62,7 @@
             "dbIndex": 3,
             "sentinels": [
                 {
-                    "host": "master2",
+                    "host": "master1",
                     "port": 26379
                 },
                 {
@@ -81,7 +81,216 @@
             "dbIndex": 4,
             "sentinels": [
                 {
-                    "host": "master2",
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-5",
+            "dbIndex": 5,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-6",
+            "dbIndex": 6,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-7",
+            "dbIndex": 7,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-8",
+            "dbIndex": 8,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-9",
+            "dbIndex": 9,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-10",
+            "dbIndex": 10,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-11",
+            "dbIndex": 11,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-12",
+            "dbIndex": 12,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-13",
+            "dbIndex": 13,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-14",
+            "dbIndex": 14,
+            "sentinels": [
+                {
+                    "host": "master1",
+                    "port": 26379
+                },
+                {
+                    "host": "replica3",
+                    "port": 26379
+                },
+                {
+                    "host": "replica4",
+                    "port": 26379
+                }
+            ],
+            "sentinelName": "mymaster"
+        },
+        {
+            "label": "db-15",
+            "dbIndex": 15,
+            "sentinels": [
+                {
+                    "host": "master1",
                     "port": 26379
                 },
                 {

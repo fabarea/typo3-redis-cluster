@@ -20,7 +20,7 @@ sed -i 's/display_errors = Off/display_errors = On/g' /etc/php.ini
 
 # enable session redis storage
 sed -i 's/session.save_handler = files/session.save_handler = redis/g' /etc/php.ini
-sed -i 's/;session.save_path = "/tmp"/session.save_path = "tcp://master1:6379"/g' /etc/php.ini
+sed -i 's#;session.save_path = "/tmp"#session.save_path = "tcp://master1:6379"#g' /etc/php.ini
 
 systemctl restart php-fpm
 
