@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 value="hello-world..."
-echo "writing data to master, value: \"${value}\""
-vagrant ssh master1 -- redis-cli set hello ${value}
+echo "writing data, value: \"${value}\""
+vagrant ssh redis1 -- redis-cli set hello ${value}
 
-nodes=("master1" "replica1" "replica2")
+nodes=("redis1" "redis2" "redis3")
 
 for node in "${nodes[@]}"
 do

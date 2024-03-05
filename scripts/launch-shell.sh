@@ -2,7 +2,7 @@
 
 tmux \
     new-session  'vagrant ssh web1' \; \
-    split-window 'vagrant ssh master1' \; \
-    split-window 'vagrant ssh replica1' \; \
-    split-window 'vagrant ssh replica2' \; \
+    split-window 'vagrant ssh redis1' \; \
+    split-window 'vagrant ssh redis2' \; \
+    split-window 'vagrant ssh redis3' \; \
     select-layout even-vertical

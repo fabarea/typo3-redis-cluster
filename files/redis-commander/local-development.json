@@ -5,15 +5,15 @@
             "dbIndex": 0,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
-                    "host": "replica1",
+                    "host": "redis2",
                     "port": 26379
                 },
                 {
-                    "host": "replica2",
+                    "host": "redis3",
                     "port": 26379
                 }
             ],
@@ -24,7 +24,7 @@
             "dbIndex": 1,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -43,7 +43,7 @@
             "dbIndex": 2,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -62,7 +62,7 @@
             "dbIndex": 3,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -81,7 +81,7 @@
             "dbIndex": 4,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -100,7 +100,7 @@
             "dbIndex": 5,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -119,7 +119,7 @@
             "dbIndex": 6,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -138,7 +138,7 @@
             "dbIndex": 7,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -157,7 +157,7 @@
             "dbIndex": 8,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -176,7 +176,7 @@
             "dbIndex": 9,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -195,7 +195,7 @@
             "dbIndex": 10,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -214,7 +214,7 @@
             "dbIndex": 11,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -233,7 +233,7 @@
             "dbIndex": 12,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -252,7 +252,7 @@
             "dbIndex": 13,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -271,7 +271,7 @@
             "dbIndex": 14,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -290,7 +290,7 @@
             "dbIndex": 15,
             "sentinels": [
                 {
-                    "host": "master1",
+                    "host": "redis1",
                     "port": 26379
                 },
                 {
@@ -303,6 +303,21 @@
                 }
             ],
             "sentinelName": "mymaster"
+        },
+        {
+            "label": "redis1",
+            "host": "redis1",
+            "dbIndex": 0
+        },
+        {
+            "label": "redis2",
+            "host": "redis2",
+            "dbIndex": 0
+        },
+        {
+            "label": "redis3",
+            "host": "redis3",
+            "dbIndex": 0
         }
     ]
 }

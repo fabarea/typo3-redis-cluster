@@ -1,6 +1,6 @@
 #########################################
 # Redis
 #########################################
-REDIS_HOST=master1
+REDIS_HOST=redis1
 REDIS_PORT=6379
 REDIS_PASSWORD=

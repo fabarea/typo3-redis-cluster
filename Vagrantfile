@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
   # web1
   # ###################################
   config.vm.define "web1" do |node|
-    node.vm.box = "generic/centos9s" # "generic/ubuntu2204" # "generic/debian12"
+    node.vm.box = "generic/centos9s" # "generic/rocky9"
     node.vm.hostname = "web1"
 
     # specific provider configuration
@@ -36,63 +36,61 @@ Vagrant.configure("2") do |config|
   end
 
   # ###################################
-  # master1
+  # redis1
   # ###################################
-  config.vm.define "master1" do |node|
-    node.vm.box = "generic/centos7"
-    node.vm.hostname = "master1"
+  config.vm.define "redis1" do |node|
+    node.vm.box = "generic/centos8"
+    node.vm.hostname = "redis1"
 
     # specific provider configuration
     configure_network(node)
 
-    # copy template to "master1"
-    node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
-    node.vm.provision "file", source: "files/sentinel/redis-sentinel.conf", destination: "/tmp/redis-sentinel.conf"
-    node.vm.provision "file", source: "files/sentinel/redis-sentinel-26379.conf", destination: "/tmp/redis-sentinel-26379.conf"
-    node.vm.provision "file", source: "files/sentinel/redis-sentinel-26379.service", destination: "/tmp/redis-sentinel-26379.service"
+    # copy template to "redis1"
+    node.vm.provision "file", source: "files/redis/redis-v5.conf", destination: "/tmp/redis.conf"
+    node.vm.provision "file", source: "files/sentinel/redis-sentinel-v5.conf", destination: "/tmp/redis-sentinel.conf"
     node.vm.provision "file", source: "files/redis-commander/local-development.json", destination: "/tmp/local-development.json"
     node.vm.provision "file", source: "files/redis-commander/redis-commander.service", destination: "/tmp/redis-commander.service"
 
-    # Provisioning "master1"
+    # Provisioning "redis1"
     node.vm.provision "shell", path: "provision/redis/1-provision.sh"
     node.vm.provision "shell", path: "provision/redis/2-configure.sh", env: { SLAVE_PRIORITY: 50 }
     node.vm.provision "shell", path: "provision/redis/3-redis-commander.sh"
   end
 
   # ###################################
-  # replica1
+  # redis2
   # ###################################
-  config.vm.define "replica1" do |node| # rename redis2
-    node.vm.box = "generic/centos7"
-    node.vm.hostname = "replica1"
+  config.vm.define "redis2" do |node|
+    node.vm.box = "generic/centos8"
+    node.vm.hostname = "redis2"
 
     # specific provider configuration
     configure_network(node)
 
-    # copy template to "replica1"
-    node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
-    node.vm.provision "file", source: "files/sentinel/redis-sentinel.conf", destination: "/tmp/redis-sentinel.conf"
+    # copy template to "redis2"
+    node.vm.provision "file", source: "files/redis/redis-v5.conf", destination: "/tmp/redis.conf"
+    node.vm.provision "file", source: "files/sentinel/redis-sentinel-v5.conf", destination: "/tmp/redis-sentinel.conf"
 
-    # Provisioning "replica1"
+    # Provisioning "redis2"
     node.vm.provision "shell", path: "provision/redis/1-provision.sh"
     node.vm.provision "shell", path: "provision/redis/2-configure.sh", env: { IS_REPLICA: true, SLAVE_PRIORITY: 75 }
   end
 
   # ###################################
-  # replica2
+  # redis3
   # ###################################
-  config.vm.define "replica2" do |node|
-    node.vm.box = "generic/centos7"
-    node.vm.hostname = "replica2"
+  config.vm.define "redis3" do |node|
+    node.vm.box = "generic/centos8"
+    node.vm.hostname = "redis3"
 
     # specific provider configuration
     configure_network(node)
 
-    # copy template to "replica2"
-    node.vm.provision "file", source: "files/redis/redis.conf", destination: "/tmp/redis.conf"
-    node.vm.provision "file", source: "files/sentinel/redis-sentinel.conf", destination: "/tmp/redis-sentinel.conf"
+    # copy template to "redis3"
+    node.vm.provision "file", source: "files/redis/redis-v5.conf", destination: "/tmp/redis.conf"
+    node.vm.provision "file", source: "files/sentinel/redis-sentinel-v5.conf", destination: "/tmp/redis-sentinel.conf"
 
-    # Provisioning "replica2"
+    # Provisioning "redis3"
     node.vm.provision "shell", path: "provision/redis/1-provision.sh"
     node.vm.provision "shell", path: "provision/redis/2-configure.sh", env: { IS_REPLICA: true, SLAVE_PRIORITY: 100 }
   end

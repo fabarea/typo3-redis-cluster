@@ -82,7 +82,7 @@ slave-priority <my-priority>
 
 * Configuration Redis Commender (graphical admin console)
     - source: `./files/redis-commander/local-development.json`
-      target: `/usr/local/lib/node_modules/redis-commander/config/local-development.json`
+      target: `/usr/lib/node_modules/redis-commander/config/local-development.json`
     - Install the systemd service unit:
         - source: `./files/redis-commander/redis-commander.service`
           target: `/etc/systemd/system/redis-commander.service`
@@ -103,8 +103,6 @@ We can make use of the additional config files provided by
 
 * source: `./files/sentinel/redis-sentinel-26380.conf`
   target: `/etc/redis-sentinel-26380.conf`
-* source: `./files/sentinel/redis-sentinel-26380.service`,
-  target: `/etc/systemd/system/redis-sentinel-26380.service`
 
 ## Testing
 
@@ -132,7 +130,7 @@ We can make use of the additional config files provided by
 ```php
 public/typo3/sysext/core/Classes/Cache/Backend/RedisBackend.php
 
-$sentinel = new \RedisSentinel('master1', 26379, 2.5);
+$sentinel = new \RedisSentinel('redis1', 26379, 2.5);
 $masterName = 'mymaster';
 [$masterIp, $masterPort] = $sentinel->getMasterAddrByName($masterName);
 $this->hostname = $masterIp;
@@ -146,7 +144,9 @@ public/typo3conf/ext/distributed_locks/src/RedisLockingStrategy.php
 
 ```shell
   sed -i 's/session.save_handler = files/session.save_handler = redis/g' /etc/php.ini
-  sed -i 's#;session.save_path = "/tmp"#session.save_path = "tcp://master1:6379"#g' /etc/php.ini
+  sed -i 's#;session.save_path = "/tmp"#session.save_path = "tcp://redis1:6379"#g' /etc/php.ini
+  https://www.thisprogrammingthing.com/2017/migrating-sessions-in-php/
+  https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/SessionStorageFramework/SessionStorage.html
 ```
 
 * To be tested https://packagist.org/packages/b13/graceful-cache
@@ -180,7 +180,7 @@ This will tail the logs of the redis instances and the sentinels. We can see the
 For better insight, it is advisable to open the logs in separate windows (cf. commands above). We can then simulate a failover by stopping the master. We should see sentinel detecting the failure and promoting a new master.
 
 ```shell
-vagrant ssh master1 -- redis-cli -p 6379 DEBUG sleep 300
+vagrant ssh redis1 -- redis-cli -p 6379 DEBUG sleep 300
 ```
 
 ## See configuration diff
@@ -188,11 +188,11 @@ vagrant ssh master1 -- redis-cli -p 6379 DEBUG sleep 300
 Create a diff between the vendor configuration and the current configuration
 
 ```bash
-vagrant ssh master1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
-vagrant ssh master1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
+vagrant ssh redis1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
+vagrant ssh redis1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
 
-vagrant ssh replica1 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
-vagrant ssh replica1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
+vagrant ssh redis2 -- sudo diff -ru /etc/redis.conf.vendor /etc/redis.conf
+vagrant ssh redis2 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis-sentinel.conf
 ```
 
 ## Packaging redis-commander
@@ -200,11 +200,11 @@ vagrant ssh replica1 -- sudo diff -ru /etc/redis-sentinel.conf.vendor /etc/redis
 ```shell
 sudo su -
 npm install -g npm-pack-all
-cd /usr/local/lib/node_modules/redis-commander
+cd /usr/lib/node_modules/redis-commander
 npm-pack-all
 
 # create a tarball
-tar -czvf redis-commander.tar.gz /usr/local/lib/node_modules/redis-commander
+tar -czvf redis-commander.tar.gz /usr/lib/node_modules/redis-commander
 
 # deploy the npm package "offline"
 npm install redis-commander.tar.gz

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 nodes=(
-    "master1"
-    "replica1"
-    "replica2"
+    "redis1"
+    "redis2"
+    "redis3"
 )
 commands=(
     # "sentinel master mymaster"

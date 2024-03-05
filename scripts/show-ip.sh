@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # List of VMs
-vms=("web1" "master1" "replica1" "replica2")
+vms=("web1" "redis1" "redis2" "redis3")
 
 # Iterate over each VM
 for vm in "${vms[@]}"; do
